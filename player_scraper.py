@@ -3,16 +3,19 @@ import random
 
 base_url = 'https://api.namemc.com/profile/{}/friends'
 
-file = open('players.txt', 'w+')
+file = open('player-list.txt', 'w+')
 
 # we will assume that the first profile used will have a friend list
-def runner(kicker):
+def runner(kicker, characters):
 	known = []
 	next = kicker
 	while(True):
 		names, uuids = parse_user(next)
 		for index in range(len(uuids)):
 			name = names[index]
+			if len(name) > characters:
+				continue
+			
 			uuid = uuids[index]
 			if uuid in known:
 				print('User is on list, skipping...')
@@ -56,4 +59,5 @@ def check_user(uuid):
 	return len(request.json()) > 0
 
 kicker = input('Please input a suitable user: ')
-runner(kicker)
+characters = int(input('Max amount of characters in the name: '))
+runner(kicker, characters)
